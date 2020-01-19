@@ -1,6 +1,6 @@
 // A simple class and associated functions for parsing the MNIST dataset.
 
-use log::{debug, info};
+use log::info;
 use std::convert::TryFrom;
 use std::fs;
 use std::io;
@@ -12,18 +12,21 @@ const TEST_DATA_FILENAME: &str = "/t10k-images-idx3-ubyte";
 const TRAIN_LABEL_FILENAME: &str = "/train-labels-idx1-ubyte";
 const TEST_LABEL_FILENAME: &str = "/t10k-labels-idx1-ubyte";
 
-// Constants relating to the MNIST dataset.
-const IMAGES_MAGIC_NUMBER: u32 = 2051;
-const LABELS_MAGIC_NUMBER: u32 = 2049;
-const NUM_TRAIN_IMAGES: u32 = 60_000;
-const NUM_TEST_IMAGES: u32 = 10_000;
-const IMAGE_ROWS: u32 = 28;
-const IMAGE_COLUMNS: u32 = 28;
+// Constants relating to the MNIST dataset. All usize for array/vec indexing.
+const IMAGES_MAGIC_NUMBER: usize = 2051;
+const LABELS_MAGIC_NUMBER: usize = 2049;
+const NUM_TRAIN_IMAGES: usize = 60_000;
+const NUM_TEST_IMAGES: usize = 10_000;
+const IMAGE_ROWS: usize = 28;
+const IMAGE_COLUMNS: usize = 28;
 
 pub struct Mnist {
-    train_data: Vec<Vec<u8>>,
+    // Arrays of images.
+    train_data: Vec<[u8; IMAGE_ROWS * IMAGE_COLUMNS]>,
+    test_data: Vec<[u8; IMAGE_ROWS * IMAGE_COLUMNS]>,
+
+    // Arrays of labels.
     train_labels: Vec<u8>,
-    test_data: Vec<Vec<u8>>,
     test_labels: Vec<u8>,
 }
 
@@ -108,7 +111,7 @@ impl Mnist {
             "Number of labels in training labels does not match expected value."
         );
 
-        // ----------------------------------- Get Testing Data -----------------------------------
+        // ----------------------------------- Get Testing Labels ---------------------------------
         info!("Reading MNIST testing labels.");
         let (magic_number, num_labels, test_labels) =
             parse_labels(&[mnist_path, TEST_LABEL_FILENAME].concat()).expect(
@@ -131,22 +134,22 @@ impl Mnist {
 
         Mnist {
             train_data: train_images,
-            train_labels: train_labels,
             test_data: test_images,
+            train_labels: train_labels,
             test_labels: test_labels,
         }
     }
 
-    pub fn get_train_image(&self, index: usize) -> &Vec<u8> {
+    pub fn get_train_image(&self, index: usize) -> &[u8; IMAGE_ROWS * IMAGE_COLUMNS] {
         &self.train_data[index]
+    }
+
+    pub fn get_test_image(&self, index: usize) -> &[u8; IMAGE_ROWS * IMAGE_COLUMNS] {
+        &self.test_data[index]
     }
 
     pub fn get_train_label(&self, index: usize) -> u8 {
         self.train_labels[index]
-    }
-
-    pub fn get_test_image(&self, index: usize) -> &Vec<u8> {
-        &self.test_data[index]
     }
 
     pub fn get_test_label(&self, index: usize) -> u8 {
@@ -154,7 +157,7 @@ impl Mnist {
     }
 }
 
-pub fn print_sample_image(image: &Vec<u8>, label: u8) {
+pub fn print_sample_image(image: &[u8; IMAGE_ROWS * IMAGE_COLUMNS], label: u8) {
     // Check that the image isn't empty and has a valid number of rows.
     assert!(image.len() != 0, "There are no pixels in this image.");
     assert_eq!(
@@ -178,7 +181,16 @@ pub fn print_sample_image(image: &Vec<u8>, label: u8) {
     }
 }
 
-fn parse_images(filename: &str) -> io::Result<(u32, u32, u32, u32, Vec<Vec<u8>>)> {
+fn parse_images(
+    filename: &str,
+) -> io::Result<(
+    usize,
+    usize,
+    usize,
+    usize,
+    Vec<[u8; IMAGE_ROWS * IMAGE_COLUMNS]>,
+)> {
+    // Open the file.
     let images_data_bytes = fs::File::open(filename)?;
     let images_data_bytes = io::BufReader::new(images_data_bytes);
     let mut buffer_32: [u8; 4] = [0; 4];
@@ -189,7 +201,7 @@ fn parse_images(filename: &str) -> io::Result<(u32, u32, u32, u32, Vec<Vec<u8>>)
         .take(4)
         .read(&mut buffer_32)
         .unwrap();
-    let magic_number = u32::from_be_bytes(buffer_32);
+    let magic_number = usize::try_from(u32::from_be_bytes(buffer_32)).unwrap();
 
     // Get number of images.
     images_data_bytes
@@ -197,7 +209,7 @@ fn parse_images(filename: &str) -> io::Result<(u32, u32, u32, u32, Vec<Vec<u8>>)
         .take(4)
         .read(&mut buffer_32)
         .unwrap();
-    let num_images = u32::from_be_bytes(buffer_32);
+    let num_images = usize::try_from(u32::from_be_bytes(buffer_32)).unwrap();
 
     // Get number or rows per image.
     images_data_bytes
@@ -205,7 +217,7 @@ fn parse_images(filename: &str) -> io::Result<(u32, u32, u32, u32, Vec<Vec<u8>>)
         .take(4)
         .read(&mut buffer_32)
         .unwrap();
-    let num_rows = u32::from_be_bytes(buffer_32);
+    let num_rows = usize::try_from(u32::from_be_bytes(buffer_32)).unwrap();
 
     // Get number or columns per image.
     images_data_bytes
@@ -213,20 +225,20 @@ fn parse_images(filename: &str) -> io::Result<(u32, u32, u32, u32, Vec<Vec<u8>>)
         .take(4)
         .read(&mut buffer_32)
         .unwrap();
-    let num_cols = u32::from_be_bytes(buffer_32);
+    let num_cols = usize::try_from(u32::from_be_bytes(buffer_32)).unwrap();
 
     // Buffer for holding image pixels.
-    let mut image_buffer: Vec<u8> = vec![0; usize::try_from(num_rows * num_cols).unwrap()];
+    let mut image_buffer: [u8; IMAGE_ROWS * IMAGE_COLUMNS] = [0; IMAGE_ROWS * IMAGE_COLUMNS];
 
     // Vector to hold all images in the file.
-    let mut images: Vec<Vec<u8>> =
-        Vec::with_capacity(usize::try_from(num_images * num_rows * num_cols).unwrap());
+    let mut images: Vec<[u8; IMAGE_ROWS * IMAGE_COLUMNS]> =
+        Vec::with_capacity(usize::try_from(num_images).unwrap());
 
     // Get images from file.
     for _image in 0..num_images {
         images_data_bytes
             .get_ref()
-            .take(u64::from(num_rows * num_cols))
+            .take(u64::try_from(num_rows * num_cols).unwrap())
             .read(&mut image_buffer)
             .unwrap();
         images.push(image_buffer.clone());
@@ -235,7 +247,7 @@ fn parse_images(filename: &str) -> io::Result<(u32, u32, u32, u32, Vec<Vec<u8>>)
     Ok((magic_number, num_images, num_rows, num_cols, images))
 }
 
-fn parse_labels(filename: &str) -> io::Result<(u32, u32, Vec<u8>)> {
+fn parse_labels(filename: &str) -> io::Result<(usize, usize, Vec<u8>)> {
     let labels_data_bytes = fs::File::open(filename)?;
     let labels_data_bytes = io::BufReader::new(labels_data_bytes);
     let mut buffer_32: [u8; 4] = [0; 4];
@@ -246,7 +258,7 @@ fn parse_labels(filename: &str) -> io::Result<(u32, u32, Vec<u8>)> {
         .take(4)
         .read(&mut buffer_32)
         .unwrap();
-    let magic_number = u32::from_be_bytes(buffer_32);
+    let magic_number = usize::try_from(u32::from_be_bytes(buffer_32)).unwrap();
 
     // Get number of labels.
     labels_data_bytes
@@ -254,7 +266,7 @@ fn parse_labels(filename: &str) -> io::Result<(u32, u32, Vec<u8>)> {
         .take(4)
         .read(&mut buffer_32)
         .unwrap();
-    let num_labels = u32::from_be_bytes(buffer_32);
+    let num_labels = usize::try_from(u32::from_be_bytes(buffer_32)).unwrap();
 
     // Buffer for holding image label.
     let mut label_buffer: [u8; 1] = [0; 1];

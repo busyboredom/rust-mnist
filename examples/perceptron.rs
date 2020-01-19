@@ -108,7 +108,7 @@ fn one_hot(value: u8) -> [f64; 10] {
     arr
 }
 
-fn normalize(image: &Vec<u8>) -> Vec<f64> {
+fn normalize(image: &[u8]) -> Vec<f64> {
     // Normalize the image.
     image
         .into_iter()
