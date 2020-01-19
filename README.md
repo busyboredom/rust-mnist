@@ -4,7 +4,7 @@ unreasonably slow and features some helpful error messages to get you started.
 Using rust-mnist
 ----------------
 
-See [examples/perceptron.rs](../blob/master/examples/perceptron.rs) for a rudamentary 
+See [examples/perceptron.rs](../master/examples/perceptron.rs) for a rudamentary 
 demonstration.
 
 
