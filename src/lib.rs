@@ -13,10 +13,10 @@ const TRAIN_LABEL_FILENAME: &str = "/train-labels-idx1-ubyte";
 const TEST_LABEL_FILENAME: &str = "/t10k-labels-idx1-ubyte";
 
 // Constants relating to the MNIST dataset.
-const NUM_TRAIN_IMAGES: u32 = 60_000;
-const NUM_TEST_IMAGES: u32 = 10_000;
 const IMAGES_MAGIC_NUMBER: u32 = 2051;
 const LABELS_MAGIC_NUMBER: u32 = 2049;
+const NUM_TRAIN_IMAGES: u32 = 60_000;
+const NUM_TEST_IMAGES: u32 = 10_000;
 const IMAGE_ROWS: u32 = 28;
 const IMAGE_COLUMNS: u32 = 28;
 
@@ -198,7 +198,6 @@ fn parse_images(filename: &str) -> io::Result<(u32, u32, u32, u32, Vec<Vec<u8>>)
         .read(&mut buffer_32)
         .unwrap();
     let num_images = u32::from_be_bytes(buffer_32);
-    debug!("Images in file: {}", num_images);
 
     // Get number or rows per image.
     images_data_bytes
@@ -207,7 +206,6 @@ fn parse_images(filename: &str) -> io::Result<(u32, u32, u32, u32, Vec<Vec<u8>>)
         .read(&mut buffer_32)
         .unwrap();
     let num_rows = u32::from_be_bytes(buffer_32);
-    debug!("Rows per image: {}", num_rows);
 
     // Get number or columns per image.
     images_data_bytes
@@ -216,7 +214,6 @@ fn parse_images(filename: &str) -> io::Result<(u32, u32, u32, u32, Vec<Vec<u8>>)
         .read(&mut buffer_32)
         .unwrap();
     let num_cols = u32::from_be_bytes(buffer_32);
-    debug!("Columns per image: {}", num_cols);
 
     // Buffer for holding image pixels.
     let mut image_buffer: Vec<u8> = vec![0; usize::try_from(num_rows * num_cols).unwrap()];
@@ -250,7 +247,6 @@ fn parse_labels(filename: &str) -> io::Result<(u32, u32, Vec<u8>)> {
         .read(&mut buffer_32)
         .unwrap();
     let magic_number = u32::from_be_bytes(buffer_32);
-    debug!("Label file magic number: {}", magic_number);
 
     // Get number of labels.
     labels_data_bytes
@@ -259,7 +255,6 @@ fn parse_labels(filename: &str) -> io::Result<(u32, u32, Vec<u8>)> {
         .read(&mut buffer_32)
         .unwrap();
     let num_labels = u32::from_be_bytes(buffer_32);
-    debug!("Labels in file: {}", num_labels);
 
     // Buffer for holding image label.
     let mut label_buffer: [u8; 1] = [0; 1];
