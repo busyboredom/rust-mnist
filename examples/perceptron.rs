@@ -35,7 +35,7 @@ fn main() {
             outputs = softmax(&outputs);
 
             // Calculate the error.
-            let mut error: [f64; 10] = subtract(outputs, one_hot(label));
+            let error: [f64; 10] = subtract(outputs, one_hot(label));
 
             // Update rolling-average accuracy.
             accuracy = {
