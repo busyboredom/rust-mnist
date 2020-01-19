@@ -5,7 +5,7 @@ Unreleased
 ==================
 
 - Significant performance improvement (now stores images as array rather than vector).
-  - This is a breaking change, as your functions will now recieve an `Array` type as offosed to a 
+  - This is a breaking change, as your functions will now recieve an `Array` type as opposed to a 
   `Vec`.
 - Removed redundant debug output.
 
