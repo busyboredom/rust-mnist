@@ -67,7 +67,7 @@ dependencies = [
 
 [[package]]
 name = "rust-mnist"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "rand 0.3.23 (registry+https://github.com/rust-lang/crates.io-index)",

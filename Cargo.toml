@@ -1,6 +1,6 @@
 [package]
 name = "rust-mnist"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["BusyBoredom <cwilkin@protonmail.com>"]
 edition = "2018"
 description = "A simple MNIST parser/loader written in rust."
@@ -12,5 +12,5 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-log = "~0.4"
-rand = "~0.3"
+log = "0.4"
+rand = "0.3"
