@@ -172,9 +172,9 @@ pub fn print_sample_image(image: &[u8; IMAGE_ROWS * IMAGE_COLUMNS], label: u8) {
     for row in 0..IMAGE_ROWS {
         for col in 0..IMAGE_COLUMNS {
             if image[usize::try_from(row * IMAGE_COLUMNS + col).unwrap()] == 0 {
-                print!("_");
+                print!("__");
             } else {
-                print!("#");
+                print!("##");
             }
         }
         print!("\n");
