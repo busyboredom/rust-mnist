@@ -3,6 +3,7 @@ extern crate rust_mnist;
 
 use rand::distributions::{IndependentSample, Range};
 use rust_mnist::{print_sample_image, Mnist};
+use std::io::{self, Write};
 
 // Hyperparameter
 const LEARNING_RATE: f64 = 0.0001;
@@ -47,7 +48,8 @@ fn main() {
                     }
                 }) / 1000.0
             };
-            println!("Accuracy: {:.2}", accuracy);
+            print!("Accuracy: {:.2}\r", accuracy);
+            io::stdout().flush().unwrap();
 
             // Update weights.
             update(&mut weights, &error, &image);
