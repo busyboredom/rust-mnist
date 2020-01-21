@@ -13,8 +13,8 @@ fn main() {
     // Load the dataset into an "Mnist" object.
     let mnist = Mnist::new("examples/MNIST_data");
 
-    // Print one image for verification.
-    print_sample_image(mnist.get_train_image(2), mnist.get_train_label(2));
+    // Print one image (the one at index 5) for verification.
+    print_sample_image(mnist.get_train_image(5), mnist.get_train_label(5));
 
     // Generate an array of random weights.
     let mut weights = generate_weights();
@@ -25,10 +25,10 @@ fn main() {
         for image_index in 0..60_000 {
             print!("Epoch: {:2}  Iter: {:5}  ", iter, image_index);
 
-            // Get an image.
+            // Get the image at index "image_index".
             let image = normalize(mnist.get_train_image(image_index));
 
-            // Get label.
+            // Get label at index "image_index".
             let label = mnist.get_train_label(image_index);
 
             // Calculate the outputs.
