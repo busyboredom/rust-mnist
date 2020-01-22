@@ -9,8 +9,13 @@ readme = "README.md"
 keywords = ["MNIST", "idx"]
 license = "MIT"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 log = "0.4"
 rand = "0.3"
+
+[dev-dependencies]
+criterion = "0"
+
+[[bench]]
+name = "load_default"
+harness = false
