@@ -155,6 +155,38 @@ impl Mnist {
     pub fn get_test_label(&self, index: usize) -> u8 {
         self.test_labels[index]
     }
+
+    pub fn get_train_pair() {}
+
+    pub fn get_test_pair() {}
+
+    pub fn train_images(&self) -> std::slice::Iter<'_, [u8; 784]> {
+        self.train_data.iter()
+    }
+
+    pub fn test_images(&self) -> std::slice::Iter<'_, [u8; 784]> {
+        self.test_data.iter()
+    }
+
+    pub fn train_labels(&self) -> std::slice::Iter<'_, u8> {
+        self.train_labels.iter()
+    }
+
+    pub fn test_labels(&self) -> std::slice::Iter<'_, u8> {
+        self.test_labels.iter()
+    }
+
+    pub fn train_set(
+        &self,
+    ) -> std::iter::Zip<std::slice::Iter<'_, [u8; 784]>, std::slice::Iter<'_, u8>> {
+        self.train_data.iter().zip(self.train_labels.iter())
+    }
+
+    pub fn test_set(
+        &self,
+    ) -> std::iter::Zip<std::slice::Iter<'_, [u8; 784]>, std::slice::Iter<'_, u8>> {
+        self.test_data.iter().zip(self.test_labels.iter())
+    }
 }
 
 pub fn print_sample_image(image: &[u8; IMAGE_ROWS * IMAGE_COLUMNS], label: u8) {

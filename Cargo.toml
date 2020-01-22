@@ -17,5 +17,9 @@ rand = "0.3"
 criterion = "0"
 
 [[bench]]
-name = "load_default"
+name = "dataset_load"
+harness = false
+
+[[bench]]
+name = "dataset_iter"
 harness = false

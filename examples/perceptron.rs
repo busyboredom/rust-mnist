@@ -22,14 +22,15 @@ fn main() {
     // Training.
     let mut accuracy = 0.0;
     for iter in 0..5 {
-        for image_index in 0..60_000 {
-            print!("Epoch: {:2}  Iter: {:5}  ", iter, image_index);
+        for training_pair in mnist.train_set().enumerate() {
+            let (i, pair) = training_pair;
+            print!("Epoch: {:2}  Iter: {:5}  ", iter, i);
 
-            // Get the image at index "image_index".
-            let image = normalize(mnist.get_train_image(image_index));
+            // Seperate the image and the label.
+            let (image, &label) = pair;
 
-            // Get label at index "image_index".
-            let label = mnist.get_train_label(image_index);
+            // Normalize the image.
+            let image = normalize(image);
 
             // Calculate the outputs.
             let mut outputs = dot_product(&image, weights);
