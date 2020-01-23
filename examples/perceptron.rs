@@ -10,7 +10,8 @@ const LEARNING_RATE: f64 = 0.0001;
 const BIAS: f64 = 1.0;
 
 fn main() {
-    // Load the dataset into an "Mnist" object.
+    // Load the dataset into an "Mnist" object. If on windows, replace the forward slashes with
+    // backslashes.
     let mnist = Mnist::new("examples/MNIST_data/");
 
     // Print one image (the one at index 5) for verification.
