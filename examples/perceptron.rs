@@ -11,7 +11,7 @@ const BIAS: f64 = 1.0;
 
 fn main() {
     // Load the dataset into an "Mnist" object.
-    let mnist = Mnist::new("examples/MNIST_data");
+    let mnist = Mnist::new("examples/MNIST_data/");
 
     // Print one image (the one at index 5) for verification.
     print_sample_image(mnist.get_train_image(5), mnist.get_train_label(5));

@@ -7,10 +7,10 @@ use std::io;
 use std::io::Read;
 
 // Filenames
-const TRAIN_DATA_FILENAME: &str = "/train-images-idx3-ubyte";
-const TEST_DATA_FILENAME: &str = "/t10k-images-idx3-ubyte";
-const TRAIN_LABEL_FILENAME: &str = "/train-labels-idx1-ubyte";
-const TEST_LABEL_FILENAME: &str = "/t10k-labels-idx1-ubyte";
+const TRAIN_DATA_FILENAME: &str = "train-images-idx3-ubyte";
+const TEST_DATA_FILENAME: &str = "t10k-images-idx3-ubyte";
+const TRAIN_LABEL_FILENAME: &str = "train-labels-idx1-ubyte";
+const TEST_LABEL_FILENAME: &str = "t10k-labels-idx1-ubyte";
 
 // Constants relating to the MNIST dataset. All usize for array/vec indexing.
 const IMAGES_MAGIC_NUMBER: usize = 2051;
