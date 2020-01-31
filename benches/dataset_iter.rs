@@ -9,8 +9,9 @@ fn dataset_iter(c: &mut Criterion) {
     custom.measurement_time(Duration::from_secs(1));
 
     // Load the dataset into an "Mnist" object.
-    let mnist = Mnist::new("examples/MNIST_data");
+    let mnist = Mnist::new("examples/MNIST_data/");
 
+    // TODO: Make windows compatible.
     custom.bench_function("Iterate Through Training Images", |b| {
         b.iter(|| {
             black_box({

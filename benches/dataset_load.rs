@@ -10,11 +10,12 @@ fn load_dataset(c: &mut Criterion) {
         .sample_size(10)
         .measurement_time(Duration::from_secs(10));
 
+    // TODO: Make windows compatible.
     custom.bench_function("Load Default Mnist", |b| {
         b.iter(|| {
             black_box({
                 // Load the dataset.
-                let _mnist = Mnist::new("examples/MNIST_data");
+                let _mnist = Mnist::new("examples/MNIST_data/");
             })
         })
     });
