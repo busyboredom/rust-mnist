@@ -7,10 +7,10 @@ use std::io;
 use std::io::Read;
 
 // Filenames
-const TRAIN_DATA_FILENAME: &str = "/train-images-idx3-ubyte";
-const TEST_DATA_FILENAME: &str = "/t10k-images-idx3-ubyte";
-const TRAIN_LABEL_FILENAME: &str = "/train-labels-idx1-ubyte";
-const TEST_LABEL_FILENAME: &str = "/t10k-labels-idx1-ubyte";
+const TRAIN_DATA_FILENAME: &str = "train-images-idx3-ubyte";
+const TEST_DATA_FILENAME: &str = "t10k-images-idx3-ubyte";
+const TRAIN_LABEL_FILENAME: &str = "train-labels-idx1-ubyte";
+const TEST_LABEL_FILENAME: &str = "t10k-labels-idx1-ubyte";
 
 // Constants relating to the MNIST dataset. All usize for array/vec indexing.
 const IMAGES_MAGIC_NUMBER: usize = 2051;
@@ -155,6 +155,38 @@ impl Mnist {
     pub fn get_test_label(&self, index: usize) -> u8 {
         self.test_labels[index]
     }
+
+    pub fn get_train_pair() {}
+
+    pub fn get_test_pair() {}
+
+    pub fn train_images(&self) -> std::slice::Iter<'_, [u8; 784]> {
+        self.train_data.iter()
+    }
+
+    pub fn test_images(&self) -> std::slice::Iter<'_, [u8; 784]> {
+        self.test_data.iter()
+    }
+
+    pub fn train_labels(&self) -> std::slice::Iter<'_, u8> {
+        self.train_labels.iter()
+    }
+
+    pub fn test_labels(&self) -> std::slice::Iter<'_, u8> {
+        self.test_labels.iter()
+    }
+
+    pub fn train_set(
+        &self,
+    ) -> std::iter::Zip<std::slice::Iter<'_, [u8; 784]>, std::slice::Iter<'_, u8>> {
+        self.train_data.iter().zip(self.train_labels.iter())
+    }
+
+    pub fn test_set(
+        &self,
+    ) -> std::iter::Zip<std::slice::Iter<'_, [u8; 784]>, std::slice::Iter<'_, u8>> {
+        self.test_data.iter().zip(self.test_labels.iter())
+    }
 }
 
 pub fn print_sample_image(image: &[u8; IMAGE_ROWS * IMAGE_COLUMNS], label: u8) {
@@ -172,9 +204,9 @@ pub fn print_sample_image(image: &[u8; IMAGE_ROWS * IMAGE_COLUMNS], label: u8) {
     for row in 0..IMAGE_ROWS {
         for col in 0..IMAGE_COLUMNS {
             if image[usize::try_from(row * IMAGE_COLUMNS + col).unwrap()] == 0 {
-                print!("_");
+                print!("__");
             } else {
-                print!("#");
+                print!("##");
             }
         }
         print!("\n");

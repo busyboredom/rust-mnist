@@ -3,17 +3,19 @@ extern crate rust_mnist;
 
 use rand::distributions::{IndependentSample, Range};
 use rust_mnist::{print_sample_image, Mnist};
+use std::io::{self, Write};
 
 // Hyperparameter
 const LEARNING_RATE: f64 = 0.0001;
 const BIAS: f64 = 1.0;
 
 fn main() {
-    // Load the dataset into an "Mnist" object.
-    let mnist = Mnist::new("examples/MNIST_data");
+    // Load the dataset into an "Mnist" object. If on windows, replace the forward slashes with
+    // backslashes.
+    let mnist = Mnist::new("examples/MNIST_data/");
 
-    // Print one image for verification.
-    print_sample_image(mnist.get_train_image(2), mnist.get_train_label(2));
+    // Print one image (the one at index 5) for verification.
+    print_sample_image(mnist.get_train_image(5), mnist.get_train_label(5));
 
     // Generate an array of random weights.
     let mut weights = generate_weights();
@@ -21,14 +23,15 @@ fn main() {
     // Training.
     let mut accuracy = 0.0;
     for iter in 0..5 {
-        for image_index in 0..60_000 {
-            print!("Epoch: {:2}  Iter: {:5}  ", iter, image_index);
+        for training_pair in mnist.train_set().enumerate() {
+            let (i, pair) = training_pair;
+            print!("Epoch: {:2}  Iter: {:5}  ", iter, i);
 
-            // Get an image.
-            let image = normalize(mnist.get_train_image(image_index));
+            // Seperate the image and the label.
+            let (image, &label) = pair;
 
-            // Get label.
-            let label = mnist.get_train_label(image_index);
+            // Normalize the image.
+            let image = normalize(image);
 
             // Calculate the outputs.
             let mut outputs = dot_product(&image, weights);
@@ -47,7 +50,8 @@ fn main() {
                     }
                 }) / 1000.0
             };
-            println!("Accuracy: {:.2}", accuracy);
+            print!("Accuracy: {:.2}\r", accuracy);
+            io::stdout().flush().unwrap();
 
             // Update weights.
             update(&mut weights, &error, &image);
