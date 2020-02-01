@@ -1,6 +1,13 @@
 Unreleased
 ==========
 
+0.1.3 (2020-1-31)
+==================
+- Added the option to use iterators to access data.
+- Added several benchmarks (run using "cargo bench")
+- Removed "/" from file paths to progress towards Windows support.
+  - This is a breaking change; please see the diff for the perceptron.rs example.
+
 0.1.2 (2020-1-19)
 ==================
 - Fixed the example link in the README.md.
