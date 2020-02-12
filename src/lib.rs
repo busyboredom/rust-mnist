@@ -22,12 +22,12 @@ const IMAGE_COLUMNS: usize = 28;
 
 pub struct Mnist {
     // Arrays of images.
-    train_data: Vec<[u8; IMAGE_ROWS * IMAGE_COLUMNS]>,
-    test_data: Vec<[u8; IMAGE_ROWS * IMAGE_COLUMNS]>,
+    pub train_data: Vec<[u8; IMAGE_ROWS * IMAGE_COLUMNS]>,
+    pub test_data: Vec<[u8; IMAGE_ROWS * IMAGE_COLUMNS]>,
 
     // Arrays of labels.
-    train_labels: Vec<u8>,
-    test_labels: Vec<u8>,
+    pub train_labels: Vec<u8>,
+    pub test_labels: Vec<u8>,
 }
 
 impl Mnist {
@@ -140,6 +140,10 @@ impl Mnist {
         }
     }
 
+    #[deprecated(
+        since = "0.1.4",
+        note = "Please access the image directly with .train_data[index]"
+    )]
     pub fn get_train_image(&self, index: usize) -> &[u8; IMAGE_ROWS * IMAGE_COLUMNS] {
         &self.train_data[index]
     }
