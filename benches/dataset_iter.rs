@@ -12,66 +12,66 @@ fn dataset_iter(c: &mut Criterion) {
     let mnist = Mnist::new("examples/MNIST_data/");
 
     // TODO: Make windows compatible.
-    custom.bench_function("Iterate Through Training Images", |b| {
+    custom.bench_function("Iterate Through Default Training Images", |b| {
         b.iter(|| {
             black_box({
                 // Retrieve each image by iterating through them.
-                for image in mnist.train_images() {
+                for image in mnist.train_data.iter() {
                     let _temp = image;
                 }
             })
         })
     });
 
-    custom.bench_function("Iterate Through Testing Images", |b| {
+    custom.bench_function("Iterate Through Default Testing Images", |b| {
         b.iter(|| {
             black_box({
                 // Retrieve each image by iterating through them.
-                for image in mnist.test_images() {
+                for image in mnist.test_data.iter() {
                     let _temp = image;
                 }
             })
         })
     });
 
-    custom.bench_function("Iterate Through Training Labels", |b| {
+    custom.bench_function("Iterate Through Default Training Labels", |b| {
         b.iter(|| {
             black_box({
                 // Retrieve each label by iterating through them.
-                for label in mnist.train_labels() {
+                for label in mnist.train_labels.iter() {
                     let _temp = label;
                 }
             })
         })
     });
 
-    custom.bench_function("Iterate Through Testing Labels", |b| {
+    custom.bench_function("Iterate Through Default Testing Labels", |b| {
         b.iter(|| {
             black_box({
                 // Retrieve each label by iterating through them.
-                for label in mnist.test_labels() {
+                for label in mnist.test_labels.iter() {
                     let _temp = label;
                 }
             })
         })
     });
 
-    custom.bench_function("Iterate Through Training Set", |b| {
+    custom.bench_function("Iterate Through Default Training Set", |b| {
         b.iter(|| {
             black_box({
                 // Retrieve each pair by iterating through them.
-                for pair in mnist.train_set() {
+                for pair in mnist.train_data.iter().zip(mnist.train_labels.iter()) {
                     let _temp = pair;
                 }
             })
         })
     });
 
-    custom.bench_function("Iterate Through Testing Set", |b| {
+    custom.bench_function("Iterate Through Default Testing Set", |b| {
         b.iter(|| {
             black_box({
                 // Retrieve each pair by iterating through them.
-                for pair in mnist.test_set() {
+                for pair in mnist.test_data.iter().zip(mnist.test_labels.iter()) {
                     let _temp = pair;
                 }
             })
