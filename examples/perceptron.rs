@@ -15,7 +15,7 @@ fn main() {
     let mnist = Mnist::new("examples/MNIST_data/");
 
     // Print one image (the one at index 5) for verification.
-    print_sample_image(mnist.get_train_image(5), mnist.get_train_label(5));
+    print_sample_image(&mnist.train_data[5], mnist.train_labels[5]);
 
     // Generate an array of random weights.
     let mut weights = generate_weights();
@@ -23,7 +23,12 @@ fn main() {
     // Training.
     let mut accuracy = 0.0;
     for iter in 0..5 {
-        for training_pair in mnist.train_set().enumerate() {
+        for training_pair in mnist
+            .train_data
+            .iter()
+            .zip(mnist.train_labels.iter())
+            .enumerate()
+        {
             let (i, pair) = training_pair;
             print!("Epoch: {:2}  Iter: {:5}  ", iter, i);
 

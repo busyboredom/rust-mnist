@@ -1,6 +1,11 @@
 Unreleased
 ==========
 
+0.1.4 (2020-4-6)
+==================
+- Depreciated getters; please access the data directly from now on.
+- Removed unnecessary iteration benchmarks.
+
 0.1.3 (2020-1-31)
 ==================
 - Added the option to use iterators to access data.

@@ -22,12 +22,12 @@ const IMAGE_COLUMNS: usize = 28;
 
 pub struct Mnist {
     // Arrays of images.
-    train_data: Vec<[u8; IMAGE_ROWS * IMAGE_COLUMNS]>,
-    test_data: Vec<[u8; IMAGE_ROWS * IMAGE_COLUMNS]>,
+    pub train_data: Vec<[u8; IMAGE_ROWS * IMAGE_COLUMNS]>,
+    pub test_data: Vec<[u8; IMAGE_ROWS * IMAGE_COLUMNS]>,
 
     // Arrays of labels.
-    train_labels: Vec<u8>,
-    test_labels: Vec<u8>,
+    pub train_labels: Vec<u8>,
+    pub test_labels: Vec<u8>,
 }
 
 impl Mnist {
@@ -140,48 +140,84 @@ impl Mnist {
         }
     }
 
+    #[deprecated(
+        since = "0.1.4",
+        note = "Please access the image directly with .train_data[index]"
+    )]
     pub fn get_train_image(&self, index: usize) -> &[u8; IMAGE_ROWS * IMAGE_COLUMNS] {
         &self.train_data[index]
     }
 
+    #[deprecated(
+        since = "0.1.4",
+        note = "Please access the image directly with .test_data[index]."
+    )]
     pub fn get_test_image(&self, index: usize) -> &[u8; IMAGE_ROWS * IMAGE_COLUMNS] {
         &self.test_data[index]
     }
 
+    #[deprecated(
+        since = "0.1.4",
+        note = "Please access the label directly with .train_labels[index]."
+    )]
     pub fn get_train_label(&self, index: usize) -> u8 {
         self.train_labels[index]
     }
 
+    #[deprecated(
+        since = "0.1.4",
+        note = "Please access the label directly with .test_labels[index]."
+    )]
     pub fn get_test_label(&self, index: usize) -> u8 {
         self.test_labels[index]
     }
 
-    pub fn get_train_pair() {}
-
-    pub fn get_test_pair() {}
-
+    #[deprecated(
+        since = "0.1.4",
+        note = "Please access the images directly through .train_data."
+    )]
     pub fn train_images(&self) -> std::slice::Iter<'_, [u8; 784]> {
         self.train_data.iter()
     }
 
+    #[deprecated(
+        since = "0.1.4",
+        note = "Please access the images directly through .test_data."
+    )]
     pub fn test_images(&self) -> std::slice::Iter<'_, [u8; 784]> {
         self.test_data.iter()
     }
 
+    #[deprecated(
+        since = "0.1.4",
+        note = "Please access the labels directly through .train_labels."
+    )]
     pub fn train_labels(&self) -> std::slice::Iter<'_, u8> {
         self.train_labels.iter()
     }
 
+    #[deprecated(
+        since = "0.1.4",
+        note = "Please access the labels directly through .test_labels."
+    )]
     pub fn test_labels(&self) -> std::slice::Iter<'_, u8> {
         self.test_labels.iter()
     }
 
+    #[deprecated(
+        since = "0.1.4",
+        note = "Please access the images/labels directly through .train_data and .train_labels."
+    )]
     pub fn train_set(
         &self,
     ) -> std::iter::Zip<std::slice::Iter<'_, [u8; 784]>, std::slice::Iter<'_, u8>> {
         self.train_data.iter().zip(self.train_labels.iter())
     }
 
+    #[deprecated(
+        since = "0.1.4",
+        note = "Please access the images/labels directly directly throug .test_data and .test_labels."
+    )]
     pub fn test_set(
         &self,
     ) -> std::iter::Zip<std::slice::Iter<'_, [u8; 784]>, std::slice::Iter<'_, u8>> {
