@@ -11,10 +11,10 @@ license = "MIT"
 
 [dependencies]
 log = "0.4"
-rand = "0.3"
 
 [dev-dependencies]
 criterion = "0"
+rand = "0.8"
 
 [[bench]]
 name = "dataset_load"

@@ -1,7 +1,7 @@
 extern crate rand; // For initializing weights.
 extern crate rust_mnist;
 
-use rand::distributions::{IndependentSample, Range};
+use rand::distributions::{Distribution, Uniform};
 use rust_mnist::{print_sample_image, Mnist};
 use std::io::{self, Write};
 
@@ -76,8 +76,8 @@ fn update(weights: &mut [[f64; 785]; 10], error: &[f64; 10], image: &Vec<f64>) {
 
 fn generate_weights() -> [[f64; 785]; 10] {
     // Preparing the random number generator before initializing weights.
-    let range = Range::new(0.0, 1.0);
     let mut rng = rand::thread_rng();
+    let dist = Uniform::new_inclusive(0.0, 1.0);
 
     // Creating a weight array.
     let mut weights: [[f64; 785]; 10] = [[0.0; 785]; 10];
@@ -85,7 +85,7 @@ fn generate_weights() -> [[f64; 785]; 10] {
     // Initializing the weights.
     for class_weights in weights.iter_mut() {
         for weight in class_weights.iter_mut() {
-            *weight = range.ind_sample(&mut rng);
+            *weight = dist.sample(&mut rng);
         }
     }
     weights
