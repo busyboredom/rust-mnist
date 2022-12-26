@@ -1,6 +1,12 @@
 Unreleased
 ==========
 
+0.2.0 (2022-12-25)
+==================
+- Removed deprecated getters.
+- Enabled pedandic clippy lints.
+- Updated docs.
+
 0.1.4 (2020-4-6)
 ==================
 - Depreciated getters; please access the data directly from now on.

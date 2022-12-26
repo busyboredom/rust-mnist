@@ -1,6 +1,6 @@
 [package]
 name = "rust-mnist"
-version = "0.1.4"
+version = "0.2.0"
 authors = ["BusyBoredom <cwilkin@protonmail.com>"]
 edition = "2018"
 description = "A simple MNIST parser/loader written in rust."
