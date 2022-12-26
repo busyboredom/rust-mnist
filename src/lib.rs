@@ -1,4 +1,5 @@
-// A simple class and associated functions for parsing the MNIST dataset.
+#![warn(clippy::pedantic)]
+//! A simple struct build by parsing the MNIST dataset.
 
 use log::info;
 use std::convert::TryFrom;
@@ -31,8 +32,15 @@ pub struct Mnist {
 }
 
 impl Mnist {
+    /// Load MNIST dataset.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the MNIST dataset is not present at the specified path, or if the dataset is
+    /// malformed.
+    #[must_use]
     pub fn new(mnist_path: &str) -> Mnist {
-        // ------------------------------------ Get Training Data ---------------------------------
+        // Get Training Data.
         info!("Reading MNIST training data.");
         let train_data = parse_images(&[mnist_path, TRAIN_DATA_FILENAME].concat()).expect(
             &format!(
@@ -57,10 +65,10 @@ impl Mnist {
         );
         assert_eq!(
             train_data.num_cols, IMAGE_COLUMNS,
-            "Numver of columns per image in training data does not match expected value."
+            "Number of columns per image in training data does not match expected value."
         );
 
-        // ------------------------------------ Get Testing Data ----------------------------------
+        // Get Testing Data.
         info!("Reading MNIST testing data.");
         let test_data = parse_images(&[mnist_path, TEST_DATA_FILENAME].concat()).expect(
             &format!(
@@ -85,10 +93,10 @@ impl Mnist {
         );
         assert_eq!(
             test_data.num_cols, IMAGE_COLUMNS,
-            "Numver of columns per image in testing data does not match expected value."
+            "Number of columns per image in testing data does not match expected value."
         );
 
-        // ---------------------------------- Get Training Labels ---------------------------------
+        // Get Training Labels.
         info!("Reading MNIST training labels.");
         let (magic_number, num_labels, train_labels) =
             parse_labels(&[mnist_path, TRAIN_LABEL_FILENAME].concat()).expect(
@@ -109,7 +117,7 @@ impl Mnist {
             "Number of labels in training labels does not match expected value."
         );
 
-        // ----------------------------------- Get Testing Labels ---------------------------------
+        // Get Testing Labels.
         info!("Reading MNIST testing labels.");
         let (magic_number, num_labels, test_labels) =
             parse_labels(&[mnist_path, TEST_LABEL_FILENAME].concat()).expect(
@@ -139,16 +147,19 @@ impl Mnist {
     }
 }
 
-pub fn print_sample_image(image: &[u8; IMAGE_ROWS * IMAGE_COLUMNS], label: u8) {
-    // Check that the image isn't empty and has a valid number of rows.
-    assert!(!image.is_empty(), "There are no pixels in this image.");
-    assert_eq!(
-        image.len() % IMAGE_ROWS,
-        0,
-        "Number of pixels does not evenly divide into number of rows."
-    );
-
-    println!("Sample image label: {} \nSample image:", label);
+/// Print a sample image.
+///
+/// # Examples
+/// ```
+/// use rust_mnist::{print_image, Mnist};
+///
+/// let mnist = Mnist::new("examples/MNIST_data/");
+///
+/// // Print one image (the one at index 5).
+/// print_image(&mnist.train_data[5], mnist.train_labels[5]);
+/// ```
+pub fn print_image(image: &[u8; IMAGE_ROWS * IMAGE_COLUMNS], label: u8) {
+    println!("Sample image label: {label} \nSample image:");
 
     // Print each row.
     for row in 0..IMAGE_ROWS {

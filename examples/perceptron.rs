@@ -2,7 +2,7 @@ extern crate rand; // For initializing weights.
 extern crate rust_mnist;
 
 use rand::distributions::{Distribution, Uniform};
-use rust_mnist::{print_sample_image, Mnist};
+use rust_mnist::{print_image, Mnist};
 use std::io::{self, Write};
 
 // Hyperparameter
@@ -15,7 +15,7 @@ fn main() {
     let mnist = Mnist::new("examples/MNIST_data/");
 
     // Print one image (the one at index 5) for verification.
-    print_sample_image(&mnist.train_data[5], mnist.train_labels[5]);
+    print_image(&mnist.train_data[5], mnist.train_labels[5]);
 
     // Generate an array of random weights.
     let mut weights = generate_weights();
@@ -62,13 +62,13 @@ fn main() {
             update(&mut weights, &error, &image);
         }
     }
+    println!("\nFinal Accuracy: {:.2}", accuracy);
 }
 
-fn update(weights: &mut [[f64; 785]; 10], error: &[f64; 10], image: &Vec<f64>) {
+fn update(weights: &mut [[f64; 785]; 10], error: &[f64; 10], image: &[f64]) {
     for class_index in 0..error.len() {
-        for input_index in 0..image.len() {
-            weights[class_index][input_index] -=
-                LEARNING_RATE * error[class_index] * image[input_index];
+        for (input_index, pixel) in image.iter().enumerate() {
+            weights[class_index][input_index] -= LEARNING_RATE * error[class_index] * pixel;
             weights[class_index][784] -= LEARNING_RATE * error[class_index] * BIAS;
         }
     }
@@ -91,12 +91,11 @@ fn generate_weights() -> [[f64; 785]; 10] {
     weights
 }
 
-fn dot_product(image: &Vec<f64>, weights: [[f64; 785]; 10]) -> [f64; 10] {
+fn dot_product(image: &[f64], weights: [[f64; 785]; 10]) -> [f64; 10] {
     let mut outputs: [f64; 10] = [0.0; 10];
     for output_index in 0..outputs.len() {
-        for pixel_index in 0..image.len() {
-            outputs[output_index] +=
-                f64::from(image[pixel_index]) * weights[output_index][pixel_index];
+        for (pixel_index, pixel) in image.iter().enumerate() {
+            outputs[output_index] += pixel * weights[output_index][pixel_index];
             outputs[output_index] += BIAS * weights[output_index][784];
         }
     }
@@ -120,7 +119,7 @@ fn one_hot(value: u8) -> [f64; 10] {
 fn normalize(image: &[u8]) -> Vec<f64> {
     // Normalize the image.
     image
-        .into_iter()
+        .iter()
         .map(|pixel| 2.0 * f64::from(*pixel) / 255.0 - 1.0)
         .collect()
 }
