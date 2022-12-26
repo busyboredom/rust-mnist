@@ -15,7 +15,7 @@ for you:
 
 ```TOML
 [dependencies]
-rust-mnist = "0.1"
+rust-mnist = "0.2"
 ```
 
 Finally, you may want to use some logging implementation if you'd like to see `info` or `debug`
