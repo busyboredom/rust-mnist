@@ -13,10 +13,9 @@ fn load_dataset(c: &mut Criterion) {
     // TODO: Make windows compatible.
     custom.bench_function("Load Default Mnist", |b| {
         b.iter(|| {
-            black_box({
-                // Load the dataset.
-                let _mnist = Mnist::new("examples/MNIST_data/");
-            })
+            // Load the dataset.
+            let mnist = Mnist::new("examples/MNIST_data/");
+            black_box(mnist);
         })
     });
 }
