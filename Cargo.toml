@@ -13,7 +13,7 @@ license = "MIT"
 log = "0.4"
 
 [dev-dependencies]
-criterion = "0"
+criterion = "0.4"
 rand = "0.8"
 
 [[bench]]
