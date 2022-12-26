@@ -1,5 +1,4 @@
 /target
-**/*.rs.bk
-*.swp
-*.swo
+Cargo.lock
+
 /examples/MNIST_data
